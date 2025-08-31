@@ -1,0 +1,105 @@
+/* src/components/Chat/Chat.module.css */
+
+.chatSidebar {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-left: 1px solid #ddd;
+  height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
+}
+
+.chatHeader {
+  padding: 15px;
+  background-color: #007bff;
+  color: #ffffff;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 스크롤바 스타일 */
+.chatMessages::-webkit-scrollbar {
+  width: 6px;
+}
+.chatMessages::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.chatInput {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+}
+
+.textInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.sendButton {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 18px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sendButton:hover {
+  background-color: #0056b3;
+}
+
+/* 메시지 스타일 */
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.message.mine {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+  color: #333;
+}
+
+.message.other {
+  align-self: flex-start;
+  background-color: #f1f0f0;
+  color: #333;
+}
+
+.message p {
+  margin: 0;
+}
+
+.message .timestamp {
+  align-self: flex-end;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #999;
+}

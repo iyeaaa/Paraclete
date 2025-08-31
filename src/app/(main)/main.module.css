@@ -1,0 +1,119 @@
+/* src/app/(main)/main.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+}
+
+.mainHeader {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 20px;
+  background-color: #4a90e2;
+  color: white;
+  width: 100%;
+  text-align: center;
+}
+
+.mainHeader h1 {
+    grid-column: 1 / -1;
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+.mainHeader p {
+    grid-column: 2;
+    font-size: 1em;
+}
+
+.logoutButton {
+    grid-column: 3;
+    justify-self: end;
+    color: #4A90E2;
+    background-color: white;
+    height: 40px;
+    width: 80px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.chatList {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.chatRoom {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.chatInfo h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.chatInfo p {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.remoteControlButton {
+    margin-left: auto;
+    margin-right: 10px;
+    padding: 10px 15px;
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remoteControlButton:hover {
+    background-color: #357ABD;
+}
+
+.remoteControlledButton {
+    padding: 10px 15px;
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remoteControlledButton:hover {
+    background-color: #357ABD;
+}
+
+.addMemberBtn {
+    width: 50px;
+    height: 50px;
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+}

@@ -1,0 +1,35 @@
+/* src/components/ROISelector/ROISelector.module.css */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.canvas {
+  cursor: crosshair;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.instructions {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: sans-serif;
+  text-align: center;
+  pointer-events: none; /* 아래 캔버스 클릭에 방해되지 않도록 설정 */
+}
+.instructions p {
+  margin: 5px 0;
+}
