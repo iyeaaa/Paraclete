@@ -7,13 +7,11 @@
  */
 
 // --- 타입 정의 ---
-// self 컨텍스트에 VideoFrame 생성자가 존재하므로, 타입스크립트가 알 수 있도록 선언합니다.
-declare const VideoFrame: any;
 
 // 메인 스레드에서 전달받는 데이터의 타입을 정의합니다.
 interface WorkerData {
-  readable: ReadableStream<any>;
-  writable: WritableStream<any>;
+  readable: ReadableStream<VideoFrame>;
+  writable: WritableStream<VideoFrame>;
   cropInfo: CropInfo;
   width: number;
   height: number;
@@ -44,7 +42,7 @@ interface ROIType {
  */
 function drawFrame(
   ctx: OffscreenCanvasRenderingContext2D,
-  frame: any,
+  frame: VideoFrame,
   width: number,
   height: number,
 ) {
@@ -99,12 +97,12 @@ function clipFrameToROI(
  */
 function createAndEnqueueFrame(
   canvas: OffscreenCanvas,
-  originalFrame: any,
-  controller: any,
+  originalFrame: VideoFrame,
+  controller: TransformStreamDefaultController<VideoFrame>,
 ) {
   const newFrame = new VideoFrame(canvas, {
-    timestamp: originalFrame.timestamp,
-    duration: originalFrame.duration,
+    timestamp: originalFrame.timestamp ?? 0,
+    duration: originalFrame.duration ?? 0,
   });
   controller.enqueue(newFrame);
 }
