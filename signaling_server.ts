@@ -1,11 +1,11 @@
-// server.js (Simple Socket.IO Server)
+// server.ts (Simple Socket.IO Server with TypeScript)
 
 /**
  * Node.js의 기본 HTTP 서버 모듈을 가져옵니다.
  * Express나 Next.js 없이도 기본적인 웹 서버를 생성할 수 있게 해줍니다.
  * 모든 웹 통신의 가장 기본적인 토대가 됩니다.
  */
-import { createServer } from "http";
+import { createServer, Server as HttpServer } from "http";
 
 /**
  * Next.js 프레임워크를 가져옵니다.
@@ -19,21 +19,22 @@ import next from "next";
  * 이 코드에서는 주로 미들웨어(`express.json`)를 사용하는 데 쓰입니다.
  */
 import express from "express";
+import type { Express, Request, Response } from "express";
 
 /**
  * 실시간 웹 애플리케이션을 위한 라이브러리인 Socket.IO의 Server 클래스를 가져옵니다.
  * WebSocket을 기반으로 양방향 통신 채널을 쉽게 만들 수 있게 해줍니다.
  */
-import { Server } from "socket.io";
+import { Server as SocketIOServer, Socket } from "socket.io";
 
 /**
  * 현재 환경이 '프로덕션'(배포) 환경이 아닌 '개발' 환경인지 여부를 결정합니다.
  * true이면 개발 모드로, 페이지 변경 시 자동 리로드 같은 편의 기능을 제공합니다.
  */
-const dev = process.env.NODE_ENV !== "production";
+const dev: boolean = process.env.NODE_ENV !== "production";
 
-const hostname = "localhost";
-const port = 3000;
+const hostname: string = "localhost";
+const port: number = 3000;
 
 /**
  * Next.js 애플리케이션 인스턴스를 생성합니다.
@@ -58,15 +59,15 @@ await app.prepare();
  * Express 애플리케이션 인스턴스를 생성합니다.
  * 이 인스턴스를 통해 미들웨어를 추가하는 등의 작업을 할 수 있습니다.
  */
-const expressApp = express();
-const httpServer = createServer(expressApp);
+const expressApp: Express = express();
+const httpServer: HttpServer = createServer(expressApp);
 
 /**
  * 위에서 생성한 HTTP 서버(`httpServer`) 위에 Socket.IO 서버를 설정합니다.
  * 이렇게 하면 하나의 포트(3000번)로 웹 페이지 제공(HTTP)과 실시간 통신(WebSocket)을 동시에 처리할 수 있습니다.
  * Socket.IO 서버는 HTTP 서버에 '붙어서' 동작합니다.
  */
-const io = new Server(httpServer, {
+const io: SocketIOServer = new SocketIOServer(httpServer, {
   cors: {
     origin: "*", // For development, allow all origins. Restrict in production.
     methods: ["GET", "POST"],
@@ -84,7 +85,7 @@ expressApp.use(express.urlencoded({ extended: true }));
 
 // 처리되지 않은 모든 요청을 Next.js의 요청 핸들러로 전달합니다.
 // 이 코드는 다른 모든 라우팅 및 미들웨어 뒤에 위치해야 합니다.
-expressApp.all(/.*/, (req, res) => {
+expressApp.all(/.*/, (req: Request, res: Response) => {
   return handle(req, res);
 });
 
@@ -94,10 +95,10 @@ expressApp.all(/.*/, (req, res) => {
  * 소켓 ID와 이름이 같지 않은 방(즉, 사용자들이 만든 방)만 필터링합니다.
  * @returns {string[]} 공개 방 이름의 배열을 반환합니다.
  */
-function getPublicRooms() {
+function getPublicRooms(): string[] {
   const { rooms, sids } = io.sockets.adapter;
-  const publicRooms = [];
-  rooms.forEach((_, key) => {
+  const publicRooms: string[] = [];
+  rooms.forEach((_, key: string) => {
     // 방 이름(key)이 특정 소켓의 개인 방(sid)이 아닌 경우에만 공개 방으로 간주합니다.
     if (sids.get(key) === undefined) {
       publicRooms.push(key);
@@ -110,11 +111,11 @@ function getPublicRooms() {
  * 클라이언트가 Socket.IO 서버에 성공적으로 연결되었을 때 발생하는 'connection' 이벤트를 처리합니다.
  * 연결된 각 클라이언트는 고유한 `socket` 객체를 가지며, 이 객체를 통해 서버와 클라이언트가 통신합니다.
  */
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket) => {
   console.log(`소켓 연결 성공: ${socket.id}`);
 
   // 클라이언트가 특정 방에 참여하고 싶을 때 보내는 'join' 이벤트를 처리합니다.
-  socket.on("join", (roomName) => {
+  socket.on("join", (roomName: string) => {
     socket.join(roomName); // 해당 소켓을 특정 방(roomName)에 입장시킵니다.
     console.log(`${socket.id}이(가) ${roomName} 방에 참여했습니다.`);
     // 방 목록에 변경이 생겼으므로, 모든 클라이언트에게 'update_rooms' 이벤트를 보내 최신 방 목록을 전송합니다.
@@ -128,23 +129,23 @@ io.on("connection", (socket) => {
    */
 
   // 한 클라이언트가 화상 통화를 시작하려 할 때, 같은 방의 다른 클라이언트에게 'start' 신호를 보냅니다.
-  socket.on("start", (roomName) => {
+  socket.on("start", (roomName: string) => {
     socket.to(roomName).emit("start");
   });
 
   // Peer A가 생성한 'offer'(통화 제안 정보)를 받아서 같은 방의 다른 클라이언트(Peer B)에게 전달합니다.
-  socket.on("offer", (offer, roomName) => {
+  socket.on("offer", (offer: RTCSessionDescriptionInit, roomName: string) => {
     socket.to(roomName).emit("offer", offer);
   });
 
   // Peer B가 생성한 'answer'(통화 수락 정보)를 받아서 Peer A에게 전달합니다.
-  socket.on("answer", (answer, roomName) => {
+  socket.on("answer", (answer: RTCSessionDescriptionInit, roomName: string) => {
     socket.to(roomName).emit("answer", answer);
   });
 
   // 네트워크 주소 정보인 'ICE candidate'를 다른 피어에게 전달합니다.
   // P2P 연결 경로를 설정하는 데 사용됩니다.
-  socket.on("ice", (ice, roomName) => {
+  socket.on("ice", (ice: RTCIceCandidateInit, roomName: string) => {
     socket.to(roomName).emit("ice", ice);
   });
 
@@ -154,7 +155,7 @@ io.on("connection", (socket) => {
    * 이를 이용해 해당 소켓이 있던 모든 방에 'bye' 이벤트를 보내 다른 참여자들에게 퇴장 사실을 알립니다.
    */
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) => {
+    socket.rooms.forEach((room: string) => {
       socket.to(room).emit("bye", socket.id);
     });
   });
@@ -173,7 +174,7 @@ io.on("connection", (socket) => {
  * 생성된 HTTP 서버를 지정된 포트(3000)와 호스트 이름('localhost')에서 실행합니다.
  * 이 함수가 호출되어야 비로소 서버가 외부의 연결 요청을 받기 시작합니다.
  */
-httpServer.listen(port, (err) => {
+httpServer.listen(port, (err?: Error) => {
   if (err) throw err; // 서버 실행 중 에러가 발생하면 콘솔에 출력하고 프로세스를 중지합니다.
   console.log(`> Ready on http://${hostname}:${port}`);
 });
