@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Features
+
+- **Next.js 15** with App Router
+- **TypeScript** for type safety
+- **Socket.IO** for real-time communication
+- **WebRTC** for peer-to-peer video/audio streaming
+- **tRPC** for type-safe API calls
+- **Tailwind CSS** for styling
+
 ## Getting Started
 
 First, run the development server:
@@ -14,11 +23,20 @@ pnpm dev
 bun dev
 ```
 
+This will start both the Next.js application and the TypeScript-based signaling server.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Signaling Server
+
+The project includes a TypeScript-based signaling server (`signaling_server.ts`) that handles:
+- WebRTC signaling for peer-to-peer connections
+- Room management for video/audio sessions
+- Real-time communication via Socket.IO
+
+The server runs on the same port (3000) as the Next.js application.
 
 ## Learn More
 
