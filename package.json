@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx --tsconfig tsconfig.server.json signaling_server.ts",
+    "dev": "tsx --tsconfig tsconfig.server.json src/server/signaling_server.ts",
     "build": "next build",
     "start": "NODE_ENV=production tsx --tsconfig tsconfig.server.json signaling_server.ts",
     "lint": "next lint"

@@ -2,8 +2,11 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { Socket } from 'socket.io-client';
 
+// 로컬 네트워크 전용 설정 (STUN/TURN 서버 불필요)
 const ICE_SERVERS = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+  iceServers: [],
+  // 로컬 연결만 허용 (호스트 후보만 사용)
+  iceCandidatePoolSize: 0,
 };
 
 /**
@@ -42,29 +45,89 @@ export const usePeerConnection = (roomId: string, socketRef: React.MutableRefObj
   }, []);
 
   useEffect(() => {
-    if (!socketRef.current) return;
+    if (!socketRef.current) {
+      console.log('Socket not available');
+      return;
+    }
 
     const socket = socketRef.current;
+    console.log('Creating new RTCPeerConnection with ICE servers:', ICE_SERVERS);
     const pc = new RTCPeerConnection(ICE_SERVERS);
     pcRef.current = pc;
 
     // 연결 상태 변경 이벤트 핸들러
     pc.onconnectionstatechange = () => {
       if (pcRef.current) {
-        setConnectionState(pcRef.current.connectionState);
+        const newState = pcRef.current.connectionState;
+        console.log('🔗 PeerConnection state changed:', newState);
+        console.log('🧊 ICE connection state:', pcRef.current.iceConnectionState);
+        console.log('📡 Signaling state:', pcRef.current.signalingState);
+        console.log('🔌 ICE gathering state:', pcRef.current.iceGatheringState);
+        setConnectionState(newState);
+
+        // 연결 실패 시 상세 정보 출력
+        if (newState === 'failed') {
+          console.error('❌ WebRTC connection failed!');
+          console.error('ICE connection state:', pcRef.current.iceConnectionState);
+          console.error('Signaling state:', pcRef.current.signalingState);
+        }
+      }
+    };
+
+    // ICE 연결 상태 변경 이벤트 핸들러
+    pc.oniceconnectionstatechange = () => {
+      if (pcRef.current) {
+        const iceState = pcRef.current.iceConnectionState;
+        console.log('🧊 ICE connection state changed:', iceState);
+        
+        if (iceState === 'failed') {
+          console.error('❌ ICE connection failed! Trying to restart ICE...');
+          pcRef.current.restartIce();
+        }
+      }
+    };
+
+    // ICE 수집 상태 변경 이벤트 핸들러
+    pc.onicegatheringstatechange = () => {
+      if (pcRef.current) {
+        console.log('🔍 ICE gathering state:', pcRef.current.iceGatheringState);
       }
     };
 
     // ICE Candidate 생성 이벤트 핸들러
     pc.onicecandidate = (event) => {
       if (event.candidate && socketRef.current) {
-        socketRef.current.emit("ice", event.candidate, roomId);
+        const candidate = event.candidate;
+        console.log('📤 Sending ICE candidate:', {
+          type: candidate.type,
+          protocol: candidate.protocol,
+          address: candidate.address,
+          port: candidate.port,
+          priority: candidate.priority,
+          relatedAddress: candidate.relatedAddress,
+          relatedPort: candidate.relatedPort,
+        });
+        socketRef.current.emit("ice", candidate, roomId);
+      } else if (!event.candidate) {
+        console.log('✅ ICE gathering completed');
       }
+    };
+
+    // ICE Candidate 오류 핸들러 (로컬 전용이므로 에러 무시)
+    pc.onicecandidateerror = (event: RTCPeerConnectionIceErrorEvent) => {
+      // 로컬 네트워크에서는 STUN/TURN 에러가 정상적으로 발생하므로 무시
+      console.debug('ICE candidate error (ignored for local network):', event.errorCode);
     };
 
     // 원격 스트림 수신 이벤트 핸들러
     pc.ontrack = (event) => {
+      console.log('📹 Received remote track:', event.track.kind);
       setRemoteStream(event.streams[0]);
+    };
+
+    // 데이터 채널 이벤트 핸들러
+    pc.ondatachannel = (event) => {
+      console.log('📨 Received data channel:', event.channel.label);
     };
 
     // 소켓 이벤트 리스너 등록
@@ -72,8 +135,11 @@ export const usePeerConnection = (roomId: string, socketRef: React.MutableRefObj
     socket.on("answer", handleAnswer);
     socket.on("ice", handleIceCandidate);
 
+    console.log('✅ PeerConnection setup complete, waiting for connection...');
+
     // 클린업 함수
     return () => {
+      console.log('🧹 Cleaning up PeerConnection');
       socket.off("offer", handleOffer);
       socket.off("answer", handleAnswer);
       socket.off("ice", handleIceCandidate);

@@ -3,14 +3,16 @@
 
 import { useWebRTC } from "@/hooks/useWebRTC";
 import { useParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/Chat/Chat";
+// import RemoteControl from "@/components/RemoteControl/RemoteControl"; // COMMENTED OUT: Remote control disabled
 import styles from "./viewer.module.css";
 
 function ViewerComponent({ roomId }: { roomId: string }) {
-  const { remoteStream, messages, connectionState, sendMessage } =
+  const { remoteStream, messages, connectionState, sendMessage, dataChannelRef, dataChannelState } =
     useWebRTC(roomId);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  // const [isRemoteControlEnabled, setIsRemoteControlEnabled] = useState(false); // COMMENTED OUT: Remote control disabled
 
   useEffect(() => {
     if (remoteVideoRef.current && remoteStream) {
@@ -36,6 +38,15 @@ function ViewerComponent({ roomId }: { roomId: string }) {
           muted
           className={styles.videoPlayer}
         />
+        
+        {/* COMMENTED OUT: Remote control component disabled
+        <RemoteControl
+          dataChannelRef={dataChannelRef}
+          isEnabled={isRemoteControlEnabled}
+          onToggle={() => setIsRemoteControlEnabled(!isRemoteControlEnabled)}
+          dataChannelState={dataChannelState}
+        />
+        */}
       </main>
       <Chat messages={messages} sendMessage={sendMessage} />
     </div>

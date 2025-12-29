@@ -3,99 +3,181 @@
     display: flex;
     width: 100vw;
     height: 100vh;
+    background-color: #f5f5f5;
 }
 
 .mainContent {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f0f2f5;
+    padding: 24px;
+    background-color: #f8f9fa;
     overflow-y: auto;
+    position: relative;
 }
 
+/* 헤더 영역 */
+.mainContent h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+    z-index: 1;
+}
+
+.mainContent > p {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0 0 16px 0;
+    z-index: 1;
+}
+
+/* 연결 상태 배지 */
+.connectionStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 24px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+}
+
+.connectionStatus span {
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.connectionStatus span::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.connectionStatus .new::before {
+    background-color: #9e9e9e;
+    box-shadow: 0 0 8px #9e9e9e;
+}
+
+.connectionStatus .connecting::before {
+    background-color: #ffc107;
+    box-shadow: 0 0 8px #ffc107;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.connectionStatus .connected::before {
+    background-color: #4caf50;
+    box-shadow: 0 0 8px #4caf50;
+}
+
+.connectionStatus .disconnected::before,
+.connectionStatus .failed::before,
+.connectionStatus .closed::before {
+    background-color: #f44336;
+    box-shadow: 0 0 8px #f44336;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 비디오 래퍼 */
 .videoWrapper {
     width: 100%;
-    max-width: 900px;
-    max-height: 75vh;
-    margin-bottom: 20px;
-    /* JS에 의해 aspect-ratio가 동적으로 설정됩니다. */
+    max-width: 1200px;
+    margin: 0 auto 24px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #000;
+    position: relative;
+    z-index: 1;
+    border: 1px solid #e0e0e0;
 }
 
 .videoWrapper video {
     width: 100%;
     height: 100%;
-    border: 1px solid #ddd;
+    display: block;
     background-color: #000;
 }
 
-.connectionStatus {
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: #555;
-}
-.connectionStatus span {
-    font-weight: bold;
-}
-.connectionStatus .new {
-    color: #6c757d;
-}
-.connectionStatus .connecting {
-    color: #ffc107;
-}
-.connectionStatus .connected {
-    color: #28a745;
-}
-.connectionStatus .disconnected,
-.connectionStatus .failed,
-.connection.closed {
-    color: #dc3545;
-}
-
+/* 컨트롤 버튼들 */
 .controls {
     display: flex;
-    gap: 10px; /* 버튼 사이의 간격을 줍니다. */
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    z-index: 1;
 }
 
-.startButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-.startButton:hover {
-    background-color: #218838;
-}
-
-.stopButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-.stopButton:hover {
-    background-color: #c82333;
-}
-
+/* 매트 버튼 스타일 */
+.startButton,
+.stopButton,
 .roiButton {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.2s;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid #d0d0d0;
+    background-color: #ffffff;
+    color: #2a2a2a;
 }
+
+.startButton:hover,
+.stopButton:hover,
 .roiButton:hover {
-    background-color: #0056b3;
+    background-color: #f5f5f5;
+    border-color: #a0a0a0;
+}
+
+.startButton:active,
+.stopButton:active,
+.roiButton:active {
+    background-color: #e8e8e8;
+}
+
+.roiButton.active {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: #2a2a2a;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .mainContent {
+        padding: 16px;
+    }
+
+    .mainContent h1 {
+        font-size: 22px;
+    }
+
+    .controls {
+        gap: 8px;
+    }
+
+    .startButton,
+    .stopButton,
+    .roiButton {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
 }

@@ -1,0 +1,189 @@
+/* COMMENTED OUT: Remote Control CSS styles disabled
+.remoteControlContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.toggleButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleButton.enabled {
+  background-color: #dc3545;
+  color: white;
+}
+
+.toggleButton.enabled:hover {
+  background-color: #c82333;
+}
+
+.toggleButton.disabled {
+  background-color: #28a745;
+  color: white;
+}
+
+.toggleButton.disabled:hover {
+  background-color: #218838;
+}
+
+.activeButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activeButton.active {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.activeButton.active:hover {
+  background-color: #e0a800;
+}
+
+.activeButton.inactive {
+  background-color: #6c757d;
+  color: white;
+}
+
+.activeButton.inactive:hover {
+  background-color: #5a6268;
+}
+
+.status {
+  background-color: #e9ecef;
+  padding: 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.status p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.detailedStatus {
+  font-size: 0.8rem !important;
+  color: #6c757d !important;
+  font-family: monospace;
+}
+
+.connected {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.connecting {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.disconnected {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.controlArea {
+  min-height: 300px;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.controlArea.active {
+  border-color: #007bff;
+  background-color: #f8f9ff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+}
+
+.controlArea.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 49%, rgba(0, 123, 255, 0.1) 50%, transparent 51%);
+  background-size: 20px 20px;
+  animation: gridMove 2s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(20px, 20px);
+  }
+}
+
+.instruction {
+  text-align: center;
+  color: #007bff;
+  font-weight: 500;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.disabledMessage {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* 터치 디바이스를 위한 추가 스타일 */
+@media (hover: none) and (pointer: coarse) {
+  .controlArea {
+    min-height: 400px;
+  }
+  
+  .controls {
+    flex-direction: column;
+  }
+  
+  .toggleButton,
+  .activeButton {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* 활성화된 상태에서의 커서 스타일 */
+.controlArea.active {
+  cursor: crosshair;
+}
+
+.controlArea.active:hover {
+  border-color: #0056b3;
+}
+*/

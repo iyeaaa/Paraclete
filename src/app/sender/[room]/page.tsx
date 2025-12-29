@@ -18,11 +18,15 @@ function SenderComponent({ roomId }: { roomId: string }) {
     stopScreenShare,
     sendMessage,
     applyROICropping,
+    dataChannelRef,
+    // executeRemoteControlEvent, // COMMENTED OUT: Remote control disabled
+    // enableRemoteControl, // COMMENTED OUT: Remote control disabled
   } = useWebRTC(roomId);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const videoWrapperRef = useRef<HTMLDivElement>(null);
   const [isSelectingROI, setIsSelectingROI] = useState(false);
+  // const [isRemoteControlEnabled, setIsRemoteControlEnabled] = useState(false); // COMMENTED OUT: Remote control disabled
 
   useEffect(() => {
     const video = localVideoRef.current;
@@ -107,7 +111,13 @@ function SenderComponent({ roomId }: { roomId: string }) {
             <span className={styles[connectionState]}>{connectionState}</span>
           </p>
           <div ref={videoWrapperRef} className={styles.videoWrapper}>
-            <video ref={localVideoRef} autoPlay playsInline muted />
+            <video 
+              ref={localVideoRef} 
+              autoPlay 
+              playsInline 
+              muted 
+              // style={{ pointerEvents: isRemoteControlEnabled ? 'auto' : 'none' }} // COMMENTED OUT: Remote control disabled
+            />
           </div>
           <div className={styles.controls}>
             {!isSharing ? (
@@ -125,6 +135,18 @@ function SenderComponent({ roomId }: { roomId: string }) {
                 >
                   영역 선택
                 </button>
+                {/* COMMENTED OUT: Remote control button disabled
+                <button
+                  onClick={() => {
+                    const newState = !isRemoteControlEnabled;
+                    setIsRemoteControlEnabled(newState);
+                    enableRemoteControl(localVideoRef.current, newState);
+                  }}
+                  className={`${styles.roiButton} ${isRemoteControlEnabled ? styles.active : ''}`}
+                >
+                  {isRemoteControlEnabled ? '원격제어 비활성화' : '원격제어 활성화'}
+                </button>
+                */}
               </>
             )}
           </div>

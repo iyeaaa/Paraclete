@@ -6,6 +6,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **TypeScript** for type safety
 - **Socket.IO** for real-time communication
 - **WebRTC** for peer-to-peer video/audio streaming
+- **ROI Selection** - Region of Interest cropping for screen sharing ([Demo](https://youtu.be/SdQgGRilE1M))
 - **tRPC** for type-safe API calls
 - **Tailwind CSS** for styling
 

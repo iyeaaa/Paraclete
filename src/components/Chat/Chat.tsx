@@ -13,6 +13,7 @@ interface ChatProps {
 
 export default function Chat({ messages, sendMessage }: ChatProps) {
   const [inputValue, setInputValue] = useState('');
+  const [isOpen, setIsOpen] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 새 메시지가 추가될 때마다 스크롤을 맨 아래로 이동시킵니다.
@@ -29,33 +30,40 @@ export default function Chat({ messages, sendMessage }: ChatProps) {
   };
 
   return (
-    <div className={styles.chatSidebar}>
+    <div className={`${styles.chatSidebar} ${isOpen ? styles.open : styles.closed}`}>
       <header className={styles.chatHeader}>
         <h3>채팅</h3>
+        <button
+          className={styles.toggleButton}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? '채팅 닫기' : '채팅 열기'}
+        >
+          {isOpen ? '›' : '‹'}
+        </button>
       </header>
 
-      <main className={styles.chatMessages}>
-        {messages.map((msg, index) => (
-          <div key={index} className={`${styles.message} ${msg.sender === 'me' ? styles.mine : styles.other}`}>
-            <p>{msg.text}</p>
-            <span className={styles.timestamp}>{msg.timestamp}</span>
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </main>
+        <main className={styles.chatMessages}>
+          {messages.map((msg, index) => (
+            <div key={index} className={`${styles.message} ${msg.sender === 'me' ? styles.mine : styles.other}`}>
+              <p>{msg.text}</p>
+              <span className={styles.timestamp}>{msg.timestamp}</span>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </main>
 
-      <footer className={styles.chatInput}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%' }}>
-          <input
-            type="text"
-            placeholder="메시지를 입력하세요"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            className={styles.textInput}
-          />
-          <button type="submit" className={styles.sendButton}>전송</button>
-        </form>
-      </footer>
+        <footer className={styles.chatInput}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%' }}>
+            <input
+              type="text"
+              placeholder="메시지를 입력하세요"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className={styles.textInput}
+            />
+            <button type="submit" className={styles.sendButton}>전송</button>
+          </form>
+        </footer>
     </div>
   );
 }
